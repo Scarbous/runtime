@@ -23,6 +23,8 @@ class Runtime extends SymfonyRuntime
     public function __construct(array $options = [])
     {
         $options['frankenphp_loop_max'] = (int) ($options['frankenphp_loop_max'] ?? $_SERVER['FRANKENPHP_LOOP_MAX'] ?? $_ENV['FRANKENPHP_LOOP_MAX'] ?? 500);
+        $options['frankenphp_middlewares'] = (string) ($options['frankenphp_middlewares'] ?? $_SERVER['FRANKENPHP_MIDDLEWARES'] ?? $_ENV['FRANKENPHP_MIDDLEWARES'] ?? '');
+        $options['frankenphp_middlewares'] = array_filter(explode("\n", $options['frankenphp_middlewares']));
 
         parent::__construct($options);
     }
