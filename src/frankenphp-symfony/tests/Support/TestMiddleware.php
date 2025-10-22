@@ -8,7 +8,7 @@ use Runtime\FrankenPhpSymfony\Middleware\MiddlewareInterface;
 
 class TestMiddleware implements MiddlewareInterface
 {
-    function __construct()
+    public function __construct()
     {
         self::$invoked = false;
     }

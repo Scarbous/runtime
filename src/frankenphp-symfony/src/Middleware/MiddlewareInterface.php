@@ -6,5 +6,5 @@ namespace Runtime\FrankenPhpSymfony\Middleware;
 
 interface MiddlewareInterface
 {
-    function wrap(callable $handler, array $server): void;
+    public function wrap(callable $handler, array $server): void;
 }

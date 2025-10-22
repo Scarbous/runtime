@@ -18,6 +18,7 @@ class Runtime extends SymfonyRuntime
     /**
      * @param array{
      *   frankenphp_loop_max?: int,
+     *   frankenphp_middlewares?: string
      * } $options
      */
     public function __construct(array $options = [])

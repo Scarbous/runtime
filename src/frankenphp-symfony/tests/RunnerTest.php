@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Runtime\FrankenPhpSymfony\Tests;
 
-require_once __DIR__ . '/function-mock.php';
+require_once __DIR__.'/function-mock.php';
 
 use PHPUnit\Framework\TestCase;
 use Runtime\FrankenPhpSymfony\Exception\InvalidMiddlewareException;
@@ -25,16 +25,17 @@ interface TestAppInterface extends HttpKernelInterface, TerminableInterface
  */
 class RunnerTest extends TestCase
 {
-
-    static function runData(): iterable
+    public static function runData(): iterable
     {
         yield 'basic' => [];
+
         yield 'middleware' => [
-            'middleware' => TestMiddleware::class
+            'middleware' => TestMiddleware::class,
         ];
+
         yield 'Invalid middleware' => [
             'middleware' => InvalidMiddleware::class,
-            'expectException' => InvalidMiddlewareException::class
+            'expectException' => InvalidMiddlewareException::class,
         ];
     }
 
@@ -43,15 +44,11 @@ class RunnerTest extends TestCase
      */
     public function testRun(
         ?string $middleware = null,
-        ?string $expectException = null
+        ?string $expectException = null,
     ): void {
-        if ($expectException !== null) {
-            $this->expectException($expectException);
-        }
-
         $application = $this->createMock(TestAppInterface::class);
 
-        if ($expectException === null) {
+        if (null === $expectException) {
             $application
                 ->expects($this->once())
                 ->method('handle')
@@ -67,15 +64,15 @@ class RunnerTest extends TestCase
                     }
                 );
             $application->expects($this->once())->method('terminate');
+        } else {
+            $this->expectException($expectException);
         }
 
         $_SERVER['FOO'] = 'bar';
 
-        $runner = new Runner($application, 500, array_filter([
-            $middleware
-        ]));
+        $runner = new Runner($application, 500, array_filter([$middleware]));
 
-        $assertMiddlewareInvoked = $expectException === null && $middleware && method_exists($middleware, 'isInvoked');
+        $assertMiddlewareInvoked = null === $expectException && $middleware && method_exists($middleware, 'isInvoked');
         if ($assertMiddlewareInvoked) {
             $this->assertFalse($middleware::isInvoked());
         }
